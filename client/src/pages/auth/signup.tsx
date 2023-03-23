@@ -13,15 +13,65 @@ import {
   Text,
   useColorModeValue,
   Link,
+  useToast,
 } from '@chakra-ui/react';
-import { useState } from 'react';
+import { ChangeEvent, MouseEvent, useState } from 'react';
 import { ViewIcon, ViewOffIcon } from '@chakra-ui/icons';
 import { useRouter } from 'next/router';
+import axios from 'axios'
+
+interface dataType {
+  firstName: string | undefined,
+  lastName: string | undefined,
+  email: string | undefined,
+  password: string | undefined
+}
+
+const signupUser = async (data: dataType) => {
+  try {
+    let res = await axios.post('/user/signup', data)
+    return res.data
+  } catch (e: any) {
+    console.log(e.message);
+  }
+}
+
 
 export default function signup() {
-  const [showPassword, setShowPassword] = useState(false);
+  const toast = useToast()
   const router = useRouter()
+  const [showPassword, setShowPassword] = useState<boolean>(false);
+  const [loading, setLoading] = useState<boolean>(false)
+  const [data, setData] = useState<dataType>({
+    firstName: '',
+    lastName: '',
+    email: '',
+    password: ''
+  })
 
+  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target
+    setData({ ...data, [name]: value })
+  }
+
+  const handleSubmit = (e: MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault()
+    setLoading(true)
+    signupUser(data).then(r => {
+      toast({
+        title: r.message,
+        status: r.status,
+        duration: 5000,
+        isClosable: true,
+        position:'top-right',
+      })
+      if(r.status === 'success') return router.push('/auth/login')
+
+    }).finally(() => setLoading(false))
+  }
+
+
+  const { firstName, lastName, email, password } = data;
   return (
     <Flex
       minH={'100vh'}
@@ -47,24 +97,24 @@ export default function signup() {
               <Box>
                 <FormControl id="firstName" isRequired>
                   <FormLabel>First Name</FormLabel>
-                  <Input type="text" />
+                  <Input value={firstName} name={'firstName'} onChange={handleChange} type="text" />
                 </FormControl>
               </Box>
               <Box>
                 <FormControl id="lastName">
                   <FormLabel>Last Name</FormLabel>
-                  <Input type="text" />
+                  <Input value={lastName} name={'lastName'} onChange={handleChange} type="text" />
                 </FormControl>
               </Box>
             </HStack>
             <FormControl id="email" isRequired>
               <FormLabel>Email address</FormLabel>
-              <Input type="email" />
+              <Input value={email} name={'email'} onChange={handleChange} type="email" />
             </FormControl>
             <FormControl id="password" isRequired>
               <FormLabel>Password</FormLabel>
               <InputGroup>
-                <Input type={showPassword ? 'text' : 'password'} />
+                <Input value={password} name={'password'} onChange={handleChange} type={showPassword ? 'text' : 'password'} />
                 <InputRightElement h={'full'}>
                   <Button
                     variant={'ghost'}
@@ -78,6 +128,8 @@ export default function signup() {
             </FormControl>
             <Stack spacing={10} pt={2}>
               <Button
+                isLoading={loading}
+                onClick={handleSubmit}
                 loadingText="Submitting"
                 size="lg"
                 bg={'blue.400'}

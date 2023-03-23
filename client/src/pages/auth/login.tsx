@@ -11,12 +11,71 @@ import {
     Heading,
     Text,
     useColorModeValue,
+    useToast,
 } from '@chakra-ui/react';
+import axios from 'axios';
 import { useRouter } from 'next/router';
+import { ChangeEvent, MouseEvent, useState } from 'react';
+
+interface dataType {
+    email: string | undefined,
+    password: string | undefined
+}
+
+const loginUser = async (data: dataType) => {
+    try {
+        let res = await axios.post('/user/login', data)
+        return res.data
+    } catch (e: any) {
+        console.log(e.message);
+    }
+}
 
 export default function login() {
 
     const router = useRouter()
+    const [loading, setLoading] = useState<boolean>(false)
+    const [data, setData] = useState<dataType>({
+        email: '',
+        password: ''
+    })
+    const toast = useToast()
+
+    const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
+        const { name, value } = e.target
+        setData({ ...data, [name]: value })
+    }
+
+    const handleSubmit = (e: MouseEvent<HTMLButtonElement>) => {
+        e.preventDefault()
+        setLoading(true)
+        loginUser(data)
+            .then(r => {
+                toast({
+                    title: r.message,
+                    status: r.status,
+                    duration: 5000,
+                    isClosable: true,
+                    position: 'top-right',
+                })
+                if (r.status === 'success') {
+                    localStorage.setItem('NotesApp', r.token)
+                    return router.push('/')
+                }
+            })
+            .catch(() => {
+                toast({
+                    title: 'Server error',
+                    status: 'error',
+                    duration: 5000,
+                    isClosable: true,
+                    position: 'top-right',
+                })
+            })
+            .finally(() => setLoading(false))
+    }
+
+    const { email, password } = data;
 
     return (
         <Flex
@@ -39,11 +98,11 @@ export default function login() {
                     <Stack spacing={4}>
                         <FormControl id="email">
                             <FormLabel>Email address</FormLabel>
-                            <Input type="email" />
+                            <Input onChange={handleChange} name='email' value={email} type="email" />
                         </FormControl>
                         <FormControl id="password">
                             <FormLabel>Password</FormLabel>
-                            <Input type="password" />
+                            <Input onChange={handleChange} name='password' value={password} type="password" />
                         </FormControl>
                         <Stack spacing={10}>
                             <Stack
@@ -54,6 +113,9 @@ export default function login() {
                                 <Link color={'blue.400'}>Forgot password?</Link>
                             </Stack>
                             <Button
+                                isLoading={loading}
+                                onClick={handleSubmit}
+                                loadingText="Submitting"
                                 bg={'blue.400'}
                                 color={'white'}
                                 _hover={{

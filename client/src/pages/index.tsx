@@ -1,10 +1,11 @@
-import Login from "./auth/login";
-
+import { Box } from "@chakra-ui/react";
 
 export default function Home() {
+
+
   return (
-    <div>
-      <Login />
-    </div>
+    <Box>
+      HOME
+    </Box>
   )
 }
