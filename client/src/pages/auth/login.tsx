@@ -1,3 +1,4 @@
+import AuthContext from '@/contextAPI/AuthContext';
 import {
     Flex,
     Box,
@@ -15,7 +16,7 @@ import {
 } from '@chakra-ui/react';
 import axios from 'axios';
 import { useRouter } from 'next/router';
-import { ChangeEvent, MouseEvent, useState } from 'react';
+import { ChangeEvent, MouseEvent, useContext, useEffect, useState } from 'react';
 
 interface dataType {
     email: string | undefined,
@@ -40,6 +41,12 @@ export default function login() {
         password: ''
     })
     const toast = useToast()
+    const { isAuth, setAuth, setToken } = useContext(AuthContext);
+
+    useEffect(() => {
+        if (isAuth)
+            router.push('/')
+    }, [isAuth])
 
     const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target
@@ -59,6 +66,8 @@ export default function login() {
                     position: 'top-right',
                 })
                 if (r.status === 'success') {
+                    setAuth(true)
+                    setToken(r.token)
                     localStorage.setItem('NotesApp', r.token)
                     return router.push('/')
                 }

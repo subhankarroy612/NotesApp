@@ -21,7 +21,7 @@ export default function App({ Component, pageProps }: AppProps) {
 
   useEffect(() => {
     setToken(localStorage.getItem('NotesApp'))
-    setAuth(!!token)
+    setAuth(!!localStorage.getItem('NotesApp'))
   }, [])
 
   return <>

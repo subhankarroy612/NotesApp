@@ -15,10 +15,11 @@ import {
   Link,
   useToast,
 } from '@chakra-ui/react';
-import { ChangeEvent, MouseEvent, useState } from 'react';
+import { ChangeEvent, MouseEvent, useContext, useEffect, useState } from 'react';
 import { ViewIcon, ViewOffIcon } from '@chakra-ui/icons';
 import { useRouter } from 'next/router';
 import axios from 'axios'
+import AuthContext from '@/contextAPI/AuthContext';
 
 interface dataType {
   firstName: string | undefined,
@@ -48,6 +49,14 @@ export default function signup() {
     email: '',
     password: ''
   })
+  const { isAuth } = useContext(AuthContext);
+
+  useEffect(() => {
+    if (isAuth)
+      router.push('/')
+  }, [isAuth])
+  console.log(isAuth);
+
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target
@@ -63,11 +72,21 @@ export default function signup() {
         status: r.status,
         duration: 5000,
         isClosable: true,
-        position:'top-right',
+        position: 'top-right',
       })
-      if(r.status === 'success') return router.push('/auth/login')
+      if (r.status === 'success') return router.push('/auth/login')
 
-    }).finally(() => setLoading(false))
+    })
+      .catch(() => {
+        toast({
+          title: 'Server error',
+          status: 'error',
+          duration: 5000,
+          isClosable: true,
+          position: 'top-right',
+        })
+      })
+      .finally(() => setLoading(false))
   }
 
 
