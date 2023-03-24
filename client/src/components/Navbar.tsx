@@ -10,21 +10,34 @@ import {
     MenuDivider,
     useColorModeValue,
 } from '@chakra-ui/react';
-import { AddIcon } from '@chakra-ui/icons';
 import { CgProfile } from 'react-icons/cg'
-import { useContext, useEffect } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import AuthContext from '@/contextAPI/AuthContext';
 import { useRouter } from 'next/router';
+import * as jwt from 'jsonwebtoken';
+import jwt_decode from "jwt-decode";
+
+type userType = {
+    _id?: string,
+    firstName?: string,
+    lastName?: string,
+    email?: string,
+}
 
 export default function Navbar() {
 
-    const { isAuth, setAuth, setToken } = useContext(AuthContext);
+    const { isAuth, setAuth, setToken, token } = useContext(AuthContext);
     const router = useRouter()
+    const [userData, setUserData] = useState<userType>({})
+
 
     useEffect(() => {
         if (!isAuth)
             router.push('/auth/login')
-    }, [isAuth])
+        if (token) {
+            setUserData(jwt_decode(token));
+        }
+    }, [isAuth, token])
 
     const handleLogout = () => {
         setAuth(false)
@@ -32,6 +45,7 @@ export default function Navbar() {
         localStorage.removeItem('NotesApp')
         router.push('/auth/login')
     }
+
 
     return (
         <>
@@ -43,15 +57,6 @@ export default function Navbar() {
 
                     </HStack>
                     <Flex alignItems={'center'}>
-                        <Button
-                            variant={'solid'}
-                            colorScheme={'teal'}
-                            size={'sm'}
-                            mr={4}
-                            leftIcon={<AddIcon />}
-                        >
-                            Action
-                        </Button>
                         <Menu>
                             <MenuButton
                                 as={Button}
@@ -60,11 +65,10 @@ export default function Navbar() {
                                 cursor={'pointer'}
                                 minW={0}>
                                 <CgProfile size={25} />
-
                             </MenuButton>
                             <MenuList>
-                                <MenuItem>Link 1</MenuItem>
-                                <MenuItem>Link 2</MenuItem>
+                                <MenuItem>{userData?.firstName + ' ' + userData?.lastName}</MenuItem>
+                                <MenuItem>{userData?.email} </MenuItem>
                                 <MenuDivider />
                                 <MenuItem onClick={handleLogout}>Logout</MenuItem>
                             </MenuList>

@@ -46,7 +46,7 @@ export default function login() {
     useEffect(() => {
         if (isAuth)
             router.push('/')
-    }, [isAuth])
+    }, [])
 
     const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target
@@ -69,7 +69,7 @@ export default function login() {
                     setAuth(true)
                     setToken(r.token)
                     localStorage.setItem('NotesApp', r.token)
-                    return router.push('/')
+                    router.push('/', undefined, { shallow: true })
                 }
             })
             .catch(() => {

@@ -54,9 +54,7 @@ export default function signup() {
   useEffect(() => {
     if (isAuth)
       router.push('/')
-  }, [isAuth])
-  console.log(isAuth);
-
+  }, [])
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target
