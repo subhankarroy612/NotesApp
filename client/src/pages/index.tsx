@@ -1,18 +1,67 @@
 import Navbar from "@/components/Navbar";
 import SingleSection from "@/components/SingleSection";
 import { Box, Button, Flex, HStack, Input, Text } from "@chakra-ui/react";
-import { useState } from "react";
-import { MdOutlineAddBox } from 'react-icons/md'
+import { useContext, useEffect, useState } from "react";
+import { MdOutlineAddBox } from 'react-icons/md';
+import axios from 'axios';
+import AuthContext from "@/contextAPI/AuthContext";
+
+const postSection = async (token: string | null, sectionName: string) => {
+  try {
+    let res = await axios.post('/section', { sectionName }, {
+      headers: {
+        token
+      }
+    })
+    return res.data
+  } catch (e: any) {
+    console.log(e.message);
+  }
+}
+
+const getSection = async (token: string | null) => {
+  try {
+    let res = await axios('/section', {
+      headers: {
+        token
+      }
+    })
+    return res.data
+  } catch (e: any) {
+    console.log(e.message);
+  }
+}
+
+interface sectionType {
+  createdAt?: string | undefined,
+  sectionName?: string | undefined,
+  updatedAt?: string | undefined,
+  userId?: string | undefined,
+  _id?: string | undefined
+}
 
 export default function Home() {
 
-  const [section, setSection] = useState<boolean>(false)
-  const [sectionName, setSectionName] = useState<string>('')
-  const [numberOfSections, setNumberOfSections] = useState<string[]>([])
+  const { token } = useContext(AuthContext)
+  const [section, setSection] = useState<boolean>(false);
+  const [sectionName, setSectionName] = useState<string>('');
+  const [numberOfSections, setNumberOfSections] = useState<sectionType[]>([]);
+
+  useEffect(() => {
+    if (token)
+      getSection(token)
+        .then((r) => {
+          setNumberOfSections(r.message)
+        })
+  }, [token])
+
+  console.log(numberOfSections);
+
 
   const handleAddSection = () => {
     setSection(false)
-    setNumberOfSections([...numberOfSections, sectionName])
+    postSection(token, sectionName)
+    setNumberOfSections([...numberOfSections, { sectionName }])
     setSectionName('')
   }
 
@@ -38,8 +87,8 @@ export default function Home() {
 
           {/* Mapping the array which has the section names */}
           {
-            numberOfSections.map((ele, i) => {
-              return <SingleSection key={i} title={ele} />
+            numberOfSections && numberOfSections.map((ele: sectionType, i: number) => {
+              return <SingleSection key={i} title={ele.sectionName} />
             })
           }
 

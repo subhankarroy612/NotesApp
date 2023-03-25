@@ -4,7 +4,7 @@ import { BsThreeDots } from 'react-icons/bs'
 import { IoMdAdd } from 'react-icons/io'
 
 interface propType {
-    title: string
+    title: string | undefined
 }
 
 export default function SingleSection({ title }: propType) {

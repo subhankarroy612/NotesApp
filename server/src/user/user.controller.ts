@@ -65,8 +65,7 @@ export class UserController {
             }
 
         } catch (e) {
-            return 'haba'
-            // return response.status(501).send({ status: 'error', message: e })
+            return response.status(501).send({ status: 'error', message: e })
         }
 
     }
