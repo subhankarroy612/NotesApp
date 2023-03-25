@@ -33,11 +33,11 @@ const getSection = async (token: string | null) => {
 }
 
 interface sectionType {
-  createdAt?: string | undefined,
-  sectionName?: string | undefined,
-  updatedAt?: string | undefined,
-  userId?: string | undefined,
-  _id?: string | undefined
+  createdAt?: string,
+  sectionName?: string,
+  updatedAt?: string,
+  userId?: string,
+  _id?: string
 }
 
 export default function Home() {
@@ -88,7 +88,7 @@ export default function Home() {
           {/* Mapping the array which has the section names */}
           {
             numberOfSections && numberOfSections.map((ele: sectionType, i: number) => {
-              return <SingleSection key={i} title={ele.sectionName} />
+              return <SingleSection key={i} title={ele.sectionName} sectionId={ele._id} />
             })
           }
 
