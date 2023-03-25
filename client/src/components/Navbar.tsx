@@ -49,11 +49,11 @@ export default function Navbar() {
 
     return (
         <>
-            <Box bg={useColorModeValue('gray.100', 'gray.900')} px={4}>
-                <Flex h={16} alignItems={'center'} justifyContent={'space-between'}>
+            <Box bg='#ff004c' px={4}>
+                <Flex h={10} alignItems={'center'} justifyContent={'space-between'}>
 
                     <HStack spacing={8} alignItems={'center'}>
-                        <Box>Logo</Box>
+                        <Box color={'white'} as='b'>Todoist</Box>
 
                     </HStack>
                     <Flex alignItems={'center'}>
@@ -64,7 +64,7 @@ export default function Navbar() {
                                 variant={'link'}
                                 cursor={'pointer'}
                                 minW={0}>
-                                <CgProfile size={25} />
+                                <CgProfile color='white' size={25} />
                             </MenuButton>
                             <MenuList>
                                 <MenuItem>{userData?.firstName + ' ' + userData?.lastName}</MenuItem>
