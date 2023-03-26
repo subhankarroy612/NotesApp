@@ -55,12 +55,16 @@ export default function Home() {
         })
   }, [token])
 
-  console.log(numberOfSections);
-
-
   const handleAddSection = () => {
     setSection(false)
-    postSection(token, sectionName)
+    postSection(token, sectionName).then((r) => {
+      if (r.status === 'success') {
+        getSection(token)
+          .then((r) => {
+            setNumberOfSections(r.message)
+          })
+      }
+    })
     setNumberOfSections([...numberOfSections, { sectionName }])
     setSectionName('')
   }
