@@ -1,4 +1,4 @@
-import { Controller, Post, Req, Res } from '@nestjs/common';
+import { Controller, Delete, Post, Req, Res } from '@nestjs/common';
 import { Request, Response } from 'express';
 import { taskModel } from 'src/models/task.model';
 
@@ -29,6 +29,20 @@ export class TaskController {
             await task.save()
 
             return response.status(201).send({ status: 'success', message: 'Task created successfully!' })
+
+        } catch (e) {
+            return response.status(501).send({ status: 'error', message: e.message })
+        }
+    }
+
+    @Delete('/:id')
+    async deleteTask(@Req() request: Request, @Res() response: Response) {
+        try {
+
+            const { id } = request.params;
+            //finding the task with the help of id and deleting it.
+            await taskModel.findByIdAndDelete(id)
+            return response.status(200).send({ status: 'success', message: 'Task deleted!' })
 
         } catch (e) {
             return response.status(501).send({ status: 'error', message: e.message })

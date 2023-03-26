@@ -1,4 +1,5 @@
-import { Controller, Get, Post, Req, Res } from '@nestjs/common';
+import { taskModel } from 'src/models/task.model';
+import { Controller, Delete, Get, Post, Req, Res } from '@nestjs/common';
 import { Request, Response } from 'express';
 import { sectionModel } from '../models/section.model'
 
@@ -34,5 +35,20 @@ export class SectionController {
             console.log(e.message);
             return response.status(501).send({ status: 'error', message: e.message })
         }
+    }
+
+    @Delete('/:id')
+    async deleteSection(@Req() request: Request, @Res() response: Response) {
+        try {
+            const { id } = request.params;
+            //finding the task with the help of id and deleting it.
+            await sectionModel.findByIdAndDelete(id)
+            await taskModel.deleteMany({ sectionId: id })
+            return response.status(200).send({ status: 'success', message: 'Section deleted!' })
+
+        } catch (e) {
+            return response.status(501).send({ status: 'error', message: e.message })
+        }
+
     }
 }
