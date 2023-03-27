@@ -1,18 +1,21 @@
 import AuthContext from '@/contextAPI/AuthContext'
 import { Box, Button, Divider, Flex, HStack, Input, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, Text, useDisclosure, VStack } from '@chakra-ui/react'
-import React, { MouseEvent, useContext, useEffect, useState } from 'react'
+import React, { Dispatch, MouseEvent, SetStateAction, useContext, useEffect, useState } from 'react'
 import { IoMdAdd } from 'react-icons/io'
 import { RxCross1 } from 'react-icons/rx'
 import { RiSendPlane2Fill } from 'react-icons/ri'
 import { MdOutlineDelete } from 'react-icons/md'
-import { RiDeleteBinFill } from 'react-icons/ri';
 
 import axios from 'axios'
+import EditSectionName from './EditSectionName'
+import { sectionType } from '@/pages'
 
 interface propType {
     title?: string,
     sectionId?: string,
-    deleteSection: Function
+    deleteSection: Function,
+    getSection: Function,
+    setNumberOfSections: Dispatch<SetStateAction<sectionType[]>>
 }
 
 interface taskType {
@@ -67,7 +70,7 @@ const deleteTask = async (id: string | undefined, token: string | null) => {
     }
 }
 
-export default function SingleSection({ title, sectionId, deleteSection }: propType) {
+export default function SingleSection({ title, sectionId, deleteSection, getSection, setNumberOfSections }: propType) {
 
     const { token } = useContext(AuthContext);
     const [task, setTask] = useState<boolean>(false)
@@ -114,7 +117,7 @@ export default function SingleSection({ title, sectionId, deleteSection }: propT
         })
     }
 
-    const handleDeleteSection = () => {
+    const handleDeleteSection = (sectionId: string) => {
         //this function is coming from index.tsx as the section array is there
         deleteSection(token, sectionId)
 
@@ -127,6 +130,10 @@ export default function SingleSection({ title, sectionId, deleteSection }: propT
             setModalTime(store)
         }
         setModalData(taskData)
+    }
+
+    const handleEditSectionName = () => {
+        console.log(title, sectionId);
     }
 
 
@@ -152,7 +159,7 @@ export default function SingleSection({ title, sectionId, deleteSection }: propT
             <Modal onClose={onClose} isOpen={isOpen} isCentered>
                 <ModalOverlay />
                 <ModalContent>
-                    <ModalHeader>{modalData.taskName}</ModalHeader>
+                    <ModalHeader mt={10}>{modalData.taskName}</ModalHeader>
                     <ModalCloseButton />
                     <ModalBody>
                         <Text as={'i'} color={'gray'}>{modalData.description}</Text>
@@ -165,12 +172,14 @@ export default function SingleSection({ title, sectionId, deleteSection }: propT
                 </ModalContent>
             </Modal>
 
-
-            <HStack justifyContent={'space-between'}>
-                <Text fontSize={'md'} as={'b'}>{title}</Text>
-                <RiDeleteBinFill onClick={handleDeleteSection} cursor={'pointer'} size={20} color={'gray'} />
-            </HStack>
-
+            {/* This is where we can edit the name of the section.  */}
+            <EditSectionName
+                getSection={getSection}
+                setNumberOfSections={setNumberOfSections}
+                title={title} handleDeleteSection={handleDeleteSection}
+                sectionId={sectionId}
+            />
+            
             {/* This is the container where all the tasks will be present */}
             <VStack spacing={2} mt={4}>
                 {
@@ -184,7 +193,7 @@ export default function SingleSection({ title, sectionId, deleteSection }: propT
                             boxShadow={'rgba(99, 99, 99, 0.2) 0px 2px 8px 0px'}
                         >
                             <HStack justifyContent={'space-between'}>
-                                <Text>{(ele.taskName)?.substring(0, 25)} ...</Text>
+                                <Text>{(ele.taskName)?.substring(0, 25)} {ele.taskName && ele.taskName?.length > 25 && '...'}</Text>
                                 <HStack>
                                     <MdOutlineDelete onClick={(e) => handleDeleteTask(e, ele._id)} color={'red'} />
                                 </HStack>

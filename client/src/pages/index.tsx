@@ -33,7 +33,7 @@ const getSection = async (token: string | null) => {
   }
 }
 
-interface sectionType {
+export interface sectionType {
   createdAt?: string,
   sectionName?: string,
   updatedAt?: string,
@@ -117,7 +117,7 @@ export default function Home() {
         {/* This will contain all the sections with task */}
         <Flex
           overflowY={'scroll'}
-          gap={2}
+          gap={6}
           mt={8}
           minH={'75vh'}
           id={styles.container}
@@ -126,7 +126,13 @@ export default function Home() {
           {/* Mapping the array which has the section names */}
           {
             numberOfSections && numberOfSections.map((ele: sectionType, i: number) => {
-              return <SingleSection key={i} title={ele.sectionName} deleteSection={deleteSection} sectionId={ele._id} />
+              return <SingleSection
+                getSection={getSection}
+                setNumberOfSections={setNumberOfSections}
+                key={i}
+                title={ele.sectionName}
+                deleteSection={deleteSection}
+                sectionId={ele._id} />
             })
           }
 

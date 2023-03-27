@@ -49,7 +49,7 @@ export default function Navbar() {
 
     return (
         <>
-            <Box bg='#ff004c' px={4}>
+            <Box bg='#ff004c' px={4} position={'sticky'} top={0} zIndex={1000}>
                 <Flex h={10} alignItems={'center'} justifyContent={'space-between'}>
 
                     <HStack spacing={8} alignItems={'center'}>
