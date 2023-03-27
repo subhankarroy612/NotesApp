@@ -24,6 +24,7 @@ export class TaskController {
         try {
 
             const { taskName, description, sectionId } = request.body
+
             //post all the task with keeping the reference of section
             const task = new taskModel({ taskName, description, sectionId })
             await task.save()

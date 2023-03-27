@@ -51,4 +51,18 @@ export class SectionController {
         }
 
     }
+
+    @Post('/:id')
+    async changeSectionName(@Req() request: Request, @Res() response: Response) {
+        try {
+            const { id } = request.params;
+            const { editedName } = request.body;
+
+            await sectionModel.updateOne({ _id: id }, { $set: { sectionName: editedName } })
+            return response.status(200).send({ status: 'success', message: 'Section name updated!' })
+
+        } catch (e) {
+            return response.status(501).send({ status: 'error', message: e.message })
+        }
+    }
 }
