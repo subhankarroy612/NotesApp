@@ -1,6 +1,6 @@
 import Navbar from "@/components/Navbar";
 import SingleSection from "@/components/SingleSection";
-import { Box, Button, Flex, HStack, Input, Text, useToast } from "@chakra-ui/react";
+import { Box, Button, Center, Flex, HStack, Image, Input, Text, useToast, VStack } from "@chakra-ui/react";
 import { useContext, useEffect, useState } from "react";
 import { MdOutlineAddBox } from 'react-icons/md';
 import axios from 'axios';
@@ -123,6 +123,8 @@ export default function Home() {
           id={styles.container}
         >
 
+
+
           {/* Mapping the array which has the section names */}
           {
             numberOfSections && numberOfSections.map((ele: sectionType, i: number) => {
@@ -137,19 +139,39 @@ export default function Home() {
           }
 
           {/* This the toogler section button */}
-          {section ? sectionToggler : <Button
-            minW={'280px'}
-            mr={1}
-            onClick={() => setSection(true)}
-            _hover={{ color: 'red' }}
-            color={'gray'}
-            size={'sm'}
-            leftIcon={<MdOutlineAddBox size={18} />}
-          >
-            Add section
-          </Button>}
+
+          <VStack>
+
+            {section ? sectionToggler : <Button
+              minW={'280px'}
+              mr={1}
+              onClick={() => setSection(true)}
+              _hover={{ color: 'red' }}
+              color={'gray'}
+              size={'sm'}
+              leftIcon={<MdOutlineAddBox size={18} />}
+            >
+              Add section
+            </Button>}
+
+            {
+              !numberOfSections.length && <Box>
+                <Box >
+                  <Image src={'https://d3ptyyxy2at9ui.cloudfront.net/assets/images/d7c6fac19c896959feaaffd6472ca7a0.jpg'} alt={'empty img'} />
+                  <Center>
+                    <Text as={'b'}>What do you need to get done today?</Text>
+                  </Center>
+                  <Center>
+                    <Text w={'280px'} color={'gray'} textAlign={'center'}>By default, tasks added here will be due today.</Text>
+                  </Center>
+                </Box>
+              </Box>
+            }
+          </VStack>
 
         </Flex>
+
+
 
       </Box>
     </Box>

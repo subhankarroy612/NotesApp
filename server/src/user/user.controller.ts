@@ -69,4 +69,39 @@ export class UserController {
         }
 
     }
+
+    @Post('/googleLogin')
+    async googleLogin(@Req() request: Request, @Res() response: Response) {
+        try {
+
+            const { firstName, lastName = '', email, password = 'google' } = request.body;
+
+            let existingUser = await userModel.findOne({ email });
+
+            //if user exists then just creating the token and sending it to frontend
+            if (existingUser) {
+                const token = jwt.sign({
+                    firstName: existingUser.firstName,
+                    lastName: existingUser.lastName,
+                    _id: existingUser._id,
+                    email: existingUser.email
+                }, process.env.TOKEN)
+                return response.status(200).send({ status: 'success', message: 'Login successful!', token })
+            }
+
+            //if user doesnt exist in the DB then saving the data.
+            const user = new userModel({ firstName, lastName, email, password })
+            await user.save()
+            const token = jwt.sign({
+                firstName: firstName,
+                lastName: lastName,
+                _id: user._id,
+                email: email
+            }, process.env.TOKEN)
+            return response.status(200).send({ status: 'success', message: 'Login successful!', token })
+
+        } catch (e) {
+            return response.status(501).send({ status: 'error', message: e })
+        }
+    }
 }

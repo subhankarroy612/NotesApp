@@ -17,6 +17,9 @@ import {
 import axios from 'axios';
 import { useRouter } from 'next/router';
 import { ChangeEvent, MouseEvent, useContext, useEffect, useState } from 'react';
+import { auth, provider } from '../../firebase/config'
+import { signInWithPopup } from 'firebase/auth'
+
 
 interface dataType {
     email: string | undefined,
@@ -26,6 +29,15 @@ interface dataType {
 const loginUser = async (data: dataType) => {
     try {
         let res = await axios.post('/user/login', data)
+        return res.data
+    } catch (e: any) {
+        console.log(e.message);
+    }
+}
+
+const googleLogin = async (firstName: string, email: string) => {
+    try {
+        const res = await axios.post('/user/googleLogin', { firstName, email })
         return res.data
     } catch (e: any) {
         console.log(e.message);
@@ -84,6 +96,39 @@ export default function login() {
             .finally(() => setLoading(false))
     }
 
+    const handleGoogleLogin = () => {
+        setLoading(true)
+        signInWithPopup(auth, provider).then((data) => {
+            const { displayName, email } = data.user;
+            if (displayName && email) {
+                googleLogin(displayName, email).then((r) => {
+                    toast({
+                        title: r.message,
+                        status: r.status,
+                        duration: 5000,
+                        isClosable: true,
+                        position: 'top-right',
+                    })
+                    if (r.status === 'success') {
+                        setAuth(true)
+                        setToken(r.token)
+                        localStorage.setItem('NotesApp', r.token)
+                        router.push('/', undefined, { shallow: true })
+                    }
+                }).catch(() => {
+                    toast({
+                        title: 'Server error',
+                        status: 'error',
+                        duration: 5000,
+                        isClosable: true,
+                        position: 'top-right',
+                    })
+                })
+            }
+        })
+            .finally(() => setLoading(false))
+    }
+
     const { email, password } = data;
 
     return (
@@ -113,7 +158,7 @@ export default function login() {
                             <FormLabel>Password</FormLabel>
                             <Input onChange={handleChange} name='password' value={password} type="password" />
                         </FormControl>
-                        <Stack spacing={10}>
+                        <Stack spacing={5}>
                             <Stack
                                 direction={{ base: 'column', sm: 'row' }}
                                 align={'start'}
@@ -123,14 +168,23 @@ export default function login() {
                             </Stack>
                             <Button
                                 isLoading={loading}
-                                onClick={handleSubmit}
                                 loadingText="Submitting"
+                                onClick={handleSubmit}
                                 bg={'blue.400'}
                                 color={'white'}
                                 _hover={{
                                     bg: 'blue.500',
                                 }}>
                                 Sign in
+                            </Button>
+                            <Button
+                                isLoading={loading}
+                                loadingText="Submitting"
+                                bg={'red'}
+                                color={'white'}
+                                onClick={handleGoogleLogin}
+                            >
+                                Sign in with Google
                             </Button>
 
                             <Text align={'center'}>
