@@ -5,7 +5,7 @@ import axios from 'axios'
 import AuthContext from '@/contextAPI/AuthContext'
 import { useEffect, useState } from 'react'
 
-axios.defaults.baseURL = 'http://localhost:8080/'
+axios.defaults.baseURL = 'https://notesapp-production-c530.up.railway.app/'
 
 export interface contextType {
   isAuth: boolean,

@@ -37,7 +37,7 @@ export default function Navbar() {
         if (token) {
             setUserData(jwt_decode(token));
         }
-    }, [isAuth, token])
+    }, [isAuth, token, router])
 
     const handleLogout = () => {
         setAuth(false)

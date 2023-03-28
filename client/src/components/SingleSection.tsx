@@ -87,7 +87,7 @@ export default function SingleSection({ title, sectionId, deleteSection, getSect
                 setAllTask(r.message);
             })
         }
-    }, [])
+    }, [sectionId, token])
 
     const handleTask = () => {
         setTask(false)
@@ -179,7 +179,7 @@ export default function SingleSection({ title, sectionId, deleteSection, getSect
                 title={title} handleDeleteSection={handleDeleteSection}
                 sectionId={sectionId}
             />
-            
+
             {/* This is the container where all the tasks will be present */}
             <VStack spacing={2} mt={4}>
                 {

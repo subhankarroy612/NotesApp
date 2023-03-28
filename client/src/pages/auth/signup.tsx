@@ -38,7 +38,7 @@ const signupUser = async (data: dataType) => {
 }
 
 
-export default function signup() {
+export default function Signup() {
   const toast = useToast()
   const router = useRouter()
   const [showPassword, setShowPassword] = useState<boolean>(false);
@@ -54,7 +54,7 @@ export default function signup() {
   useEffect(() => {
     if (isAuth)
       router.push('/')
-  }, [])
+  }, [isAuth, router])
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target
