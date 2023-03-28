@@ -8,13 +8,11 @@ import {
     MenuList,
     MenuItem,
     MenuDivider,
-    useColorModeValue,
 } from '@chakra-ui/react';
 import { CgProfile } from 'react-icons/cg'
 import { useContext, useEffect, useState } from 'react';
 import AuthContext from '@/contextAPI/AuthContext';
 import { useRouter } from 'next/router';
-import * as jwt from 'jsonwebtoken';
 import jwt_decode from "jwt-decode";
 
 type userType = {
@@ -50,11 +48,10 @@ export default function Navbar() {
     return (
         <>
             <Box bg='#ff004c' px={4} position={'sticky'} top={0} zIndex={1000}>
-                <Flex h={10} alignItems={'center'} justifyContent={'space-between'}>
+                <Box display={'flex'} h={10} alignItems={'center'} justifyContent={'space-between'}>
 
                     <HStack spacing={8} alignItems={'center'}>
                         <Box color={'white'} as='b'>NotesApp</Box>
-
                     </HStack>
                     <Flex alignItems={'center'}>
                         <Menu>
@@ -74,7 +71,7 @@ export default function Navbar() {
                             </MenuList>
                         </Menu>
                     </Flex>
-                </Flex>
+                </Box>
 
             </Box>
         </>
