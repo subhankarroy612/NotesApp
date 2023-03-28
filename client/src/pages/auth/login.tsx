@@ -58,7 +58,7 @@ export default function  SimpleCard() {
     useEffect(() => {
         if (isAuth)
             router.push('/')
-    }, [])
+    }, [isAuth, router])
 
     const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target
