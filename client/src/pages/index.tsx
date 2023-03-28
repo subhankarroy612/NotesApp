@@ -43,7 +43,8 @@ export interface sectionType {
 
 export default function Home() {
 
-  const toast = useToast()
+  const toast = useToast();
+  const [loading, setLoading] = useState<boolean>(true)
   const { token } = useContext(AuthContext)
   const [section, setSection] = useState<boolean>(false);
   const [sectionName, setSectionName] = useState<string>('');
@@ -55,6 +56,7 @@ export default function Home() {
         .then((r) => {
           setNumberOfSections(r.message)
         })
+        .finally(() => setLoading(false))
   }, [token])
 
   const handleAddSection = () => {
@@ -106,7 +108,25 @@ export default function Home() {
   </Box>
 
   return (
-    <Box>
+    <Box
+      minH={'100vh'}
+      w={'100vw'}
+    >
+
+      {loading && <Box
+        zIndex={2000}
+        position={'absolute'}
+        top={'50%'}
+        left={0}
+        right={0}
+        marginLeft={'auto'}
+        marginRight={'auto'}
+        width={'100px'}
+
+      >
+        <Image w={'100px'} h={'100px'} borderRadius={20} src="https://upload.wikimedia.org/wikipedia/commons/b/b9/Youtube_loading_symbol_1_(wobbly).gif" alt="loading img" />
+      </Box>}
+
       <Navbar />
       {/* this is the main home container */}
       <Box
@@ -155,7 +175,7 @@ export default function Home() {
             </Button>}
 
             {
-              !numberOfSections.length && <Box>
+              !numberOfSections.length && !loading && <Box>
                 <Box >
                   <Image src={'https://d3ptyyxy2at9ui.cloudfront.net/assets/images/d7c6fac19c896959feaaffd6472ca7a0.jpg'} alt={'empty img'} />
                   <Center>

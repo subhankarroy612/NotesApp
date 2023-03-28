@@ -53,7 +53,7 @@ export default function Navbar() {
                 <Flex h={10} alignItems={'center'} justifyContent={'space-between'}>
 
                     <HStack spacing={8} alignItems={'center'}>
-                        <Box color={'white'} as='b'>Todoist</Box>
+                        <Box color={'white'} as='b'>NotesApp</Box>
 
                     </HStack>
                     <Flex alignItems={'center'}>
