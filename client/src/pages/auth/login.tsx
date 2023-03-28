@@ -44,7 +44,7 @@ const googleLogin = async (firstName: string, email: string) => {
     }
 }
 
-export default function Login() {
+export default function login() {
 
     const router = useRouter()
     const [loading, setLoading] = useState<boolean>(false)
