@@ -48,13 +48,14 @@ export default function Navbar() {
     return (
         <>
             <Box bg='#ff004c' px={4} position={'sticky'} top={0} zIndex={1000}>
-                <Box  h={10} alignItems={'center'} justifyContent={'space-between'}>
-                    <Box display={'flex'} gap={8}
-                        alignItems={'center'}>
+                <Flex h={10} alignItems={'center'} justifyContent={'space-between'}>
+
+                    <HStack spacing={8} alignItems={'center'}>
                         <Box color={'white'} as='b'>NotesApp</Box>
-                    </Box>
-                    <Box alignItems={'center'}>
-                        {/* <Menu>
+
+                    </HStack>
+                    <Flex alignItems={'center'}>
+                        <Menu>
                             <MenuButton
                                 as={Button}
                                 rounded={'full'}
@@ -69,9 +70,9 @@ export default function Navbar() {
                                 <MenuDivider />
                                 <MenuItem onClick={handleLogout}>Logout</MenuItem>
                             </MenuList>
-                        </Menu> */}
-                    </Box>
-                </Box>
+                        </Menu>
+                    </Flex>
+                </Flex>
 
             </Box>
         </>
