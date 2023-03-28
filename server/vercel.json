@@ -3,7 +3,7 @@
     "env": {
         "TOKEN": "12werrf5%^&^",
         "URL":"mongodb+srv://subh:subh@atlascluster.egfnu9m.mongodb.net/NotesApp?authSource=admin&replicaSet=atlas-g3eb04-shard-0&w=majority&readPreference=primary&appname=MongoDB%20Compass&retryWrites=true&ssl=true",
-        "PORT":8080
+        "PORT":"8080"
     },
     "builds": [
         {
