@@ -48,7 +48,7 @@ export default function Navbar() {
     return (
         <>
             <Box bg='#ff004c' px={4} position={'sticky'} top={0} zIndex={1000}>
-                <Flex  h={10} alignItems={'center'} justifyContent={'space-between'}>
+                <Box  h={10} alignItems={'center'} justifyContent={'space-between'}>
                     <Box display={'flex'} gap={8}
                         alignItems={'center'}>
                         <Box color={'white'} as='b'>NotesApp</Box>
@@ -71,7 +71,7 @@ export default function Navbar() {
                             </MenuList>
                         </Menu> */}
                     </Box>
-                </Flex>
+                </Box>
 
             </Box>
         </>
