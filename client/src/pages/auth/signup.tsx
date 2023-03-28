@@ -38,7 +38,7 @@ const signupUser = async (data: dataType) => {
 }
 
 
-export default function signup() {
+export default function SignupCard() {
   const toast = useToast()
   const router = useRouter()
   const [showPassword, setShowPassword] = useState<boolean>(false);
