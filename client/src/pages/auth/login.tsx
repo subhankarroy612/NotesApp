@@ -188,7 +188,7 @@ export default function  SimpleCard() {
                             </Button>
 
                             <Text align={'center'}>
-                                Don't have an account? <Link onClick={() => router.push('/auth/signup')} color={'blue.400'}>Signup</Link>
+                                Do not have an account? <Link onClick={() => router.push('/auth/signup')} color={'blue.400'}>Signup</Link>
                             </Text>
                         </Stack>
                     </Stack>
